@@ -14,3 +14,11 @@ My beginner notes on networking and cybersecurity
 ## Lesson 3: VPNs & Packet Sniffing (Secret Tunnels)
 * **Packet Sniffing:** Hackers on public Wi-Fi (like at a café or airport) can use tools to "listen in" on unencrypted digital envelopes floating through the air.
 * **VPN (Virtual Private Network):** A VPN builds an encrypted, armored tunnel between your device and the internet so snooping hackers on public Wi-Fi only see scrambled gibberish.
+## Networking Detective Scorecard
+**Status:** Completed | **Score:** 3 / 3 (100%)
+
+| Case | Topic | Key Takeaway | Result |
+| :--- | :--- | :--- | :--- |
+| **Case 1** | **Web Security** | HTTP vs. HTTPS & Packet Sniffing | Passed |
+| **Case 2** | **Remote Access** | Port 22 (SSH) Encrypted Login | Passed |
+| **Case 3** | **Addressing** | DNS (The Internet's Phonebook) | Passed |
