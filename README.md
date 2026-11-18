@@ -128,3 +128,31 @@ Both **TCP** and **UDP** move data between applications across a network, but th
 | TCP 3-Way Handshake & SYN Floods | 2 / 2 | Incomplete handshakes (`SYN` without `ACK`) indicate potential floods or scans. |
 | TCP Teardown & Scan Flags (`RST`, `TIME_WAIT`) | 3 / 3 | `RST` aborts half-open scans; `TIME_WAIT` absorbs delayed packets. |
 | TCP vs. UDP Features, Use Cases & Security | 3 / 3 | TCP prioritizes reliability & flow control; UDP prioritizes speed for real-time traffic. |
+
+## What Is a Datagram?
+A **datagram** is a single, self-contained bundle of data sent over a connectionless network (like UDP) that carries its own source and destination addresses without relying on a prior handshake or delivery tracking.
+
+- **Self-Contained:** Holds the Source Port, Destination Port, Length, Checksum, and Payload (data) in one independent unit.
+- **Independent Routing:** Each datagram is treated separately by routers and may arrive out of order or be dropped without retransmission.
+- **Security Note:** Because no handshake is required, attackers can easily **spoof** (fake) the Source IP address on UDP datagrams to launch DDoS amplification attacks.
+
+### Data Names Across Network Layers (PDU Cheat Sheet)
+
+| Layer / Protocol | Data Unit Name | Real-World Analogy |
+| :--- | :--- | :--- |
+| **UDP** (Transport Layer) | **Datagram** | A **postcard** (has an address, sent solo, no tracking receipt). |
+| **TCP** (Transport Layer) | **Segment** | A **numbered box** in a tracked shipment (`Seq` & `ACK` receipts). |
+| **IP** (Network Layer) | **Packet** | The **shipping label** with the street address (`IP address`). |
+| **Ethernet / Wi-Fi** (Data Link Layer) | **Frame** | The **delivery truck** carrying it to the next local stop (`MAC address`). |
+
++-------------------------------------------------------------------+
+
+| IP Header:  Source IP: 10.0.0.15  --->  Dest IP: 8.8.8.8 (Google) |
++-------------------------------------------------------------------+
+
+| UDP Header: Source Port: 51234    --->  Dest Port: 53 (DNS)       |
+|             Length: 36 bytes      |     Checksum: 0x4a2f          |
++-------------------------------------------------------------------+
+
+| Payload:    "What is the IP address for google.com?"              |
++-------------------------------------------------------------------+
