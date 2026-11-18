@@ -121,3 +121,10 @@ Both **TCP** and **UDP** move data between applications across a network, but th
 ## When to Use Which?
 - **Choose TCP** when missing even one piece of data breaks the result (downloading software, loading a bank webpage, sending a password).
 - **Choose UDP** when speed matters more than perfection and a tiny glitch is okay (live Zoom calls, multiplayer gaming, streaming live sports).
+## Study Scorecard
+
+| Topic | Score | Key Takeaway |
+| :--- | :---: | :--- |
+| TCP 3-Way Handshake & SYN Floods | 2 / 2 | Incomplete handshakes (`SYN` without `ACK`) indicate potential floods or scans. |
+| TCP Teardown & Scan Flags (`RST`, `TIME_WAIT`) | 3 / 3 | `RST` aborts half-open scans; `TIME_WAIT` absorbs delayed packets. |
+| TCP vs. UDP Features, Use Cases & Security | 3 / 3 | TCP prioritizes reliability & flow control; UDP prioritizes speed for real-time traffic. |
