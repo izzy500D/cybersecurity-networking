@@ -156,3 +156,32 @@ A **datagram** is a single, self-contained bundle of data sent over a connection
 
 | Payload:    "What is the IP address for google.com?"              |
 +-------------------------------------------------------------------+
+
+
+# Common Network Ports & Protocols
+
+Network ports (`0`–`65535`) act like virtual doors on a host, directing incoming **TCP** or **UDP** traffic to the right service.
+
+## Essential Ports Cheat Sheet
+
+| Port | Transport | Service | Purpose | Security Consideration |
+| :--- | :---: | :--- | :--- | :--- |
+| **20 / 21** | TCP | FTP | File transfers (Data / Control) | Unencrypted; replace with SFTP (`22`). |
+| **22** | TCP | SSH / SFTP | Encrypted remote login & file transfer | Protect with SSH keys; block brute-force attempts. |
+| **23** | TCP | Telnet | Unencrypted remote login | Obsolete & insecure; always disable. |
+| **25** | TCP | SMTP | Outgoing email routing | Secure against open-relay spam abuse. |
+| **53** | UDP / TCP | DNS | Domain name to IP resolution | UDP for standard queries; TCP for zone transfers. |
+| **67 / 68** | UDP | DHCP | Automatic IP address assignment | Watch for rogue DHCP spoofing on LANs. |
+| **80** | TCP | HTTP | Unencrypted web traffic | Plain text; redirect to HTTPS (`443`). |
+| **110 / 143** | TCP | POP3 / IMAP | Email retrieval (Download / Sync) | Use encrypted POP3S (`995`) & IMAPS (`993`). |
+| **161 / 162** | UDP | SNMP | Network device monitoring | Use SNMPv3 for encryption & authentication. |
+| **443** | TCP | HTTPS | Encrypted web traffic (TLS) | Standard secure web port; inspect for hidden C2 traffic. |
+| **445** | TCP | SMB | Windows file & printer sharing | Block at firewall perimeter; major ransomware vector. |
+| **3389** | TCP | RDP | Windows graphical remote desktop | Never expose directly to internet; require VPN + MFA. |
+
+## Port Number Ranges
+- **0–1023:** Well-Known Ports (System & core protocols)
+- **1024–49151:** Registered Ports (Vendor applications & databases)
+- **49152–65535:** Ephemeral / Dynamic Ports (Temporary client-side ports)
+
+
