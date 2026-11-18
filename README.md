@@ -50,3 +50,36 @@ My beginner notes on networking and cybersecurity
 | :--- | :---: | :--- |
 | TCP 3-Way Handshake & SYN Floods | 2 / 2 | Incomplete handshakes (`SYN` without `ACK`) indicate potential floods or scans. |
 | TCP Teardown & Scan Flags (`RST`, `TIME_WAIT`) | In Progress | `RST` aborts half-open scans; `TIME_WAIT` absorbs delayed packets. |
+# TCP Connection Management & Security
+
+## Core TCP Features
+- **Connection-Oriented:** Establishes a formal session before sending data and closes it gracefully afterward.
+- **Flow Control:** Uses windowing so the receiver can tell the sender to slow down or speed up.
+
+### Reliable Delivery (How TCP Protects Your Data)
+TCP acts like a strict delivery tracker that makes sure nothing gets lost, broken, or mixed up:
+1. **Number It (Sequence Numbers):** Puts a number on every piece of data (`1, 2, 3`) so the receiving computer can put them back in the right order—even if they arrive late or scrambled.
+2. **Confirm It (`ACK` Receipts):** Every time the receiver gets a piece safely, it sends back a quick *"Got it!"* receipt (`ACK`).
+3. **Resend It (Retransmission):** If a piece gets lost or damaged, the sender never gets a receipt, so it automatically sends a fresh copy.
+
+## 1. Formal Setup: The 3-Way Handshake
+1. **`SYN` (Client → Server):** Client initiates a connection and synchronizes sequence numbers.
+2. **`SYN-ACK` (Server → Client):** Server acknowledges the request and sends its own sequence number.
+3. **`ACK` (Client → Server):** Client confirms receipt; the session is now `ESTABLISHED`.
+
+## 2. Formal Close: The 4-Way Wave
+1. **`FIN` (Client → Server):** Client finishes sending data and requests to close its side.
+2. **`ACK` (Server → Client):** Server acknowledges the `FIN` (enters `CLOSE_WAIT` while finishing its own data).
+3. **`FIN` (Server → Client):** Server finishes sending data and requests to close its side.
+4. **`ACK` (Client → Server):** Client confirms closure and enters `TIME_WAIT` (2MSL) before fully closing.
+
+## 3. Cybersecurity Scenarios
+- **SYN Flood (DoS):** Attacker floods a server with spoofed `SYN` packets and never sends the final `ACK`, exhausting half-open connection memory.
+- **TCP SYN Scan (Reconnaissance):** Scanner sends `SYN` → receives `SYN-ACK` → immediately sends **`RST`** (Reset) instead of `ACK` to detect open ports stealthily.
+
+## Study Scorecard
+
+| Topic | Score | Key Takeaway |
+| :--- | :---: | :--- |
+| TCP 3-Way Handshake & SYN Floods | 2 / 2 | Incomplete handshakes (`SYN` without `ACK`) indicate potential floods or scans. |
+| TCP Teardown & Scan Flags (`RST`, `TIME_WAIT`) | Completed | `RST` aborts half-open scans; `TIME_WAIT` absorbs delayed packets. |
