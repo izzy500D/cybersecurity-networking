@@ -83,3 +83,41 @@ TCP acts like a strict delivery tracker that makes sure nothing gets lost, broke
 | :--- | :---: | :--- |
 | TCP 3-Way Handshake & SYN Floods | 2 / 2 | Incomplete handshakes (`SYN` without `ACK`) indicate potential floods or scans. |
 | TCP Teardown & Scan Flags (`RST`, `TIME_WAIT`) | Completed | `RST` aborts half-open scans; `TIME_WAIT` absorbs delayed packets. |
+
+# TCP vs. UDP: Transport Layer Protocols
+
+Both **TCP** and **UDP** move data between applications across a network, but they trade off between **accuracy** and **speed**.
+
+---
+
+## Side-by-Side Comparison
+
+| Feature | TCP (Transmission Control Protocol) | UDP (User Datagram Protocol) |
+| :--- | :--- | :--- |
+| **Connection Type** | **Connection-oriented** (3-way handshake setup & 4-way close) | **Connectionless** (sends data immediately with no handshake) |
+| **Reliability** | **Reliable** (uses sequence numbers, `ACK` receipts, and retransmissions) | **"Unreliable"** (fire-and-forget; lost packets are never resent) |
+| **Flow Control** | **Yes** (uses Window Size so the receiver can slow down the sender) | **No** (sender transmits as fast as it wants) |
+| **Speed & Overhead** | **Slower** (larger header, waits for acknowledgments) | **Faster** (tiny header, zero waiting for receipts) |
+| **Real-World Analogy** | Registered mail with tracking and signature confirmation | Throwing paper airplanes or live radio broadcasting |
+| **Common Uses** | Web browsing (`HTTPS`), File transfers (`FTP`), Email (`SMTP`), `SSH` | Live video/voice calls, Online gaming, `DNS` lookups, `DHCP` |
+| **Cybersecurity Risks** | `SYN` Floods, Session Hijacking, Slow-Read (`ZeroWindow`) attacks | `UDP` Floods, DNS/NTP Amplification DDoS attacks |
+
+---
+
+## Key Features Summary
+
+### TCP (Built for Accuracy)
+1. **Connection-Oriented:** Formally opens (`SYN` → `SYN-ACK` → `ACK`) and closes (`FIN` → `ACK`) sessions.
+2. **Reliable Delivery:** Numbers every packet (`Seq`), confirms receipt (`ACK`), and resends missing data.
+3. **Flow Control:** Uses **Window Size** (`Win`) to prevent overwhelming the receiver's buffer.
+
+### UDP (Built for Speed)
+1. **Connectionless:** No formal greeting or goodbye before sending packets.
+2. **"Unreliable" Delivery:** No error recovery, packet reordering, or retransmissions.
+3. **No Flow Control:** The sender controls the transmission speed regardless of receiver capacity.
+
+---
+
+## When to Use Which?
+- **Choose TCP** when missing even one piece of data breaks the result (downloading software, loading a bank webpage, sending a password).
+- **Choose UDP** when speed matters more than perfection and a tiny glitch is okay (live Zoom calls, multiplayer gaming, streaming live sports).
