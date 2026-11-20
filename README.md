@@ -1,4 +1,4 @@
-# cybersecurity-networking
+    # cybersecurity-networking
 My beginner notes on networking and cybersecurity
 # Cybersecurity & Networking Learning Notes
 
@@ -183,5 +183,61 @@ Network ports (`0`–`65535`) act like virtual doors on a host, directing incomi
 - **0–1023:** Well-Known Ports (System & core protocols)
 - **1024–49151:** Registered Ports (Vendor applications & databases)
 - **49152–65535:** Ephemeral / Dynamic Ports (Temporary client-side ports)
+
+# Networking Basics: IPv4, Sockets, Ports, and DNS
+
+## 1. IPv4 Addresses (The Building Address)
+* **IPv4 (Internet Protocol version 4):** The standard 4-part numerical address used to identify devices on a network (e.g., `192.168.1.10`).
+* **Private IP:** Assigned by your home router to devices inside your local network (e.g., `192.168.x.x` or `10.x.x.x`). Not visible on the public internet.
+* **Public IP:** Assigned by your Internet Service Provider (ISP) to your router to communicate on the wider internet.
+* **NAT (Network Address Translation):** The process your router uses to translate your device's private IP into your router's public IP when sending traffic out to the internet.
+
+---
+
+## 2. Sockets & Ports (The Full Delivery Label)
+* **Socket:** The complete communication endpoint combining an **IP Address + Protocol + Port Number**.
+  * **Client Socket (Your Device):** `192.168.1.10 : 61204` (Private IP + Temporary Port)
+  * **Server Socket (Website/Service):** `142.250.190.46 : 443` (Public IP + Permanent Port)
+
+### Types of Ports
+
+| Port Type | Range | Who Uses It | Purpose |
+| :--- | :--- | :--- | :--- |
+| **Non-Ephemeral (Well-Known)** | `0 – 1,023` | **Servers / Websites** | Permanent, fixed doors so clients always know where to connect (e.g., Port `443` for HTTPS, Port `53` for DNS). |
+| **Ephemeral (Dynamic)** | `1,024 – 65,535` | **Clients (Your Device)** | Temporary, random ports opened for a single session and closed immediately after. |
+
+---
+
+## 3. DNS (The Internet's Phonebook)
+* **DNS (Domain Name System):** Translates human-friendly domain names (like `google.com`) into computer IP addresses (like `142.250.190.46`).
+* **Common Public DNS Servers:** Google (`8.8.8.8`), Cloudflare (`1.1.1.1`).
+
+### How a DNS Lookup Works
+1. **Local Cache:** Device checks its own short-term memory for a recent IP match.
+2. **Recursive Resolver:** If not found, device sends a query to a DNS resolver (e.g., `8.8.8.8` on **UDP Port 53**).
+3. **Server Hierarchy:** Resolver checks **Root Server** → **TLD Server (`.com`)** → **Authoritative Name Server** to get the exact IP.
+4. **Connection:** Device receives the IP and connects to the website's server socket (e.g., `142.250.190.46 : 443` via TCP).
+
+### Why DNS Uses UDP Instead of TCP
+* **Speed:** UDP skips TCP's 3-way handshake, sending the request in a single fast packet.
+* **Small Payload:** Standard DNS questions and answers are tiny (under 512 bytes) and fit in one packet.
+* **Exception:** DNS uses **TCP Port 53** only when responses are unusually large (such as server-to-server zone transfers).
+
+---
+
+## 4. Cybersecurity Takeaways
+* **Port Monitoring:** Defenders watch for unexpected open ports or traffic on suspicious ports (e.g., Port `4444`) to detect malware.
+* **DNS Security:** Attackers use **DNS Spoofing** to redirect users to fake IPs; defenders use DNS filtering to block malicious domains before a connection starts.
+
+## 5. Top 5 Beginner Ports Cheat Sheet
+
+| Port | Service | Protocol | What It Does | Cybersecurity Note |
+| :--- | :--- | :--- | :--- | :--- |
+| **22** | **SSH** (Secure Shell) | **TCP** | Lets admins log into remote servers and run commands securely. | Common target for brute-force password attacks; always use strong keys. |
+| **53** | **DNS** (Domain Name System) | **UDP** (mostly) / **TCP** | Translates website names (like `google.com`) into IP addresses. | Watch for **DNS Spoofing** or malware using DNS tunnels to sneak data out. |
+| **67 / 68** | **DHCP** (Dynamic Host Configuration Protocol) | **UDP** | Automatically hands out local IP addresses (like `192.168.1.25`) when a device joins Wi-Fi. | Attackers can set up fake "rogue" DHCP servers to intercept local traffic. |
+| **80** | **HTTP** (Web Traffic) | **TCP** | Loads regular, **unencrypted** websites. | Traffic travels in plain text—anyone on the same Wi-Fi can read passwords sent over Port 80. |
+| **443** | **HTTPS** (Secure Web Traffic) | **TCP** | Loads **encrypted** websites (the padlock icon in your browser). | Keeps web traffic private, though malware also hides inside Port 443 to blend in with normal traffic. |
+
 
 
