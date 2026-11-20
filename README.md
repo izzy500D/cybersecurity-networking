@@ -362,3 +362,27 @@ Network ports (`0`–`65535`) act like virtual doors on a host, directing incomi
 
 
 
+
+
+
+---
+
+## 6. Remote Access Protocols: Telnet vs. SSH
+
+* **Telnet (Telecommunication Network) – `TCP Port 23`:**
+  * Provides remote command-line (console) access to control another computer over a network.
+  * **Security Risk:** Sends all traffic **"in-the-clear"** (unencrypted plain text)—anyone sniffing the network can steal usernames, passwords, and commands.
+  * **Best Practice:** Never use on production systems; disable Port `23` and replace with **SSH**.
+
+* **SSH (Secure Shell) – `TCP Port 22`:**
+  * Modern, encrypted replacement for Telnet that provides secure remote terminal access and encrypted file transfers (**SFTP**).
+
+### Quick Comparison: Telnet vs. SSH
+
+| Feature | **Telnet** | **SSH** |
+| :--- | :--- | :--- |
+| **Port & Protocol** | **TCP 23** | **TCP 22** |
+| **Encryption** | **None** ("In-the-clear" plain text) | **Full Encryption** |
+| **Security Status** | **Unsafe** (Legacy / Deprecated) | **Safe** (Industry Standard) |
+
+
