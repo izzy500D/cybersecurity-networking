@@ -294,3 +294,71 @@ Network ports (`0`–`65535`) act like virtual doors on a host, directing incomi
 
 
 
+# Networking Basics: IPv4, Sockets, Ports, DNS, and File Transfers
+
+## 1. IPv4 Addresses (The Building Address)
+* **IPv4 (Internet Protocol version 4):** The standard 4-part numerical address used to identify devices on a network (e.g., `192.168.1.10`).
+* **Private IP:** Assigned by your home router to devices inside your local network (e.g., `192.168.x.x` or `10.x.x.x`). Multiple homes can reuse the same private IP, but two devices on the same Wi-Fi cannot.
+* **Public IP:** Unique address assigned by your Internet Service Provider (ISP) to your router to communicate on the wider internet.
+* **NAT (Network Address Translation):** The process your router uses to swap your device's private IP for your router's public IP when sending traffic out to the internet—and route replies back to the right device using port numbers.
+
+---
+
+## 2. Sockets & How Apps Avoid Mix-Ups
+* **Socket:** The complete communication endpoint combining an **IP Address + Protocol + Port Number**.
+  * **Client Socket (Your Device):** `10.0.0.1 : 6100` (Device IP + Temporary Port)
+  * **Server Socket (Website/Service):** `10.0.0.2 : 5004` (Server IP + Permanent Port)
+* **Key Rules:**
+  * Total ports available per protocol: **65,536** (numbered `0` through `65,535`).
+  * **TCP and UDP ports are completely separate:** `TCP/53` and `UDP/53` are two different doors.
+  * **Ports are for communication, not security:** Hiding a service on a different port number does not encrypt data or stop port scanners.
+
+### The 3 Official Port Ranges
+
+| Port Range | Official Name | Permanent or Temporary? | Who Uses It? |
+| :--- | :--- | :--- | :--- |
+| **`0 – 1,023`** | **Well-Known Ports** | **Permanent** (Non-ephemeral) | Core internet services (e.g., `20/21` FTP, `22` SSH/SFTP, `53` DNS, `69` TFTP, `80` HTTP, `443` HTTPS, `143`/`993` IMAP). |
+| **`1,024 – 49,151`** | **Registered Ports** | **Permanent** (Non-ephemeral) | Specific apps & protocols registered by organizations (e.g., **`5004` for VoIP/RTP**). |
+| **`49,152 – 65,535`** | **Dynamic / Ephemeral Ports** | **Temporary** (Ephemeral) | Client devices (your phone or laptop) opening temporary return doors for active tabs or calls. |
+
+---
+
+## 3. Beginner Ports Cheat Sheet
+
+| Port | Service | Protocol | What It Does | Cybersecurity Note |
+| :--- | :--- | :--- | :--- | :--- |
+| **20 / 21** | **FTP** (File Transfer Protocol) | **TCP** | Transfers and manages files (`21` = Control/Login, `20` = Data). | **Unsafe:** Sends usernames, passwords, and files in plain text; replace with SFTP. |
+| **22** | **SSH / SFTP** (Secure Shell / SSH File Transfer) | **TCP** | Encrypted remote terminal login (`SSH`) and encrypted file transfers (`SFTP`). | **Safe:** Encrypts traffic over a single port; protect with SSH keys and strong passwords. |
+| **53** | **DNS** (Domain Name System) | **UDP** (mostly) / **TCP** | Translates website names (like `google.com`) into IP addresses. | Watch for **DNS Spoofing** or malware hiding data inside DNS queries. |
+| **67 / 68** | **DHCP** | **UDP** | Automatically assigns local Private IPs when a device joins Wi-Fi (`67` = server, `68` = client). | Attackers can run rogue DHCP servers to intercept local network traffic. |
+| **69** | **TFTP** (Trivial File Transfer Protocol) | **UDP** | Lightweight file transfers for local tasks (router firmware updates, PXE network boot). | **No Security:** No login or encryption; never expose Port `69` to the public internet. |
+| **80** | **HTTP** (Web) | **TCP** | Loads regular, **unencrypted** websites. | **Unsafe:** Sends data in plain text; attackers on the same Wi-Fi can read passwords. |
+| **443** | **HTTPS** (Secure Web) | **TCP** | Loads **encrypted** websites (TLS/SSL padlock). | **Safe:** Encrypts web traffic, though attackers also hide malware traffic inside Port 443. |
+| **143** | **IMAP** (Email Sync) | **TCP** | Syncs email inboxes across multiple devices in **plain text**. | **Unsafe:** Passwords and emails travel unencrypted; replaced by Port `993`. |
+| **993** | **IMAPS** (Secure Email Sync) | **TCP** | Syncs email inboxes across multiple devices using **TLS/SSL encryption**. | **Safe:** Modern standard for keeping email synced across phones and laptops. |
+| **5004** | **RTP / VoIP** (Internet Voice) | **UDP** | Carries live audio and video packets for internet calls (e.g., WhatsApp, Zoom). | Uses **UDP** for speed so live calls don't lag; must be encrypted to prevent eavesdropping. |
+
+---
+
+## 4. File Transfer Protocols Compared (FTP vs. SFTP vs. TFTP)
+
+| Feature | **FTP** | **SFTP** | **TFTP** |
+| :--- | :--- | :--- | :--- |
+| **Port & Protocol** | **TCP 20** (Data) & **TCP 21** (Control) | **TCP 22** (runs inside SSH) | **UDP 69** |
+| **Encrypted?** | **No** (Plain text) | **Yes** (Full SSH encryption) | **No** (Plain text) |
+| **Login Required?** | **Yes** (Username & Password) | **Yes** (Password or SSH Key) | **No** (Zero authentication) |
+| **Functionality** | **Full-featured** (List, add, rename, delete folders) | **Full-featured** (List, add, rename, delete folders) | **Basic / Trivial** (Push or pull a file by exact name only) |
+| **Best Use Case** | Legacy internal transfers where encryption isn't needed | Safe file transfers over the internet or public Wi-Fi | Fast local network jobs (firmware updates, PXE boot) |
+
+---
+
+## 5. DNS (The Internet's Phonebook)
+* **How a DNS Lookup Works:**
+  1. **Local Cache:** Device checks its own memory for a recent IP match.
+  2. **Recursive Resolver:** Device sends a fast query to a DNS resolver (e.g., `8.8.8.8` on **UDP Port 53**).
+  3. **Server Hierarchy:** Resolver checks **Root Server** → **TLD Server (`.com`)** → **Authoritative Name Server** to get the exact IP.
+  4. **Connection:** Device connects to the website's server socket (e.g., `142.250.190.46 : 443` via TCP).
+* **Why DNS Uses UDP:** Looking up a name is a tiny, single-packet question where speed matters more than TCP's 3-way handshake (DNS only switches to **TCP Port 53** for huge responses like server zone transfers).
+
+
+
